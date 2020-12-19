@@ -1,0 +1,36 @@
+pipeline {
+  agent {
+        docker { image 'node:14-alpine' }
+    }
+  
+
+  stages{
+      stage(one){
+        when{
+            changeset "**/result/**"
+          }
+        steps{
+          echo 'Compiling worker app..'
+          dir('result'){
+            sh 'npm install'
+          }
+        }
+      }
+      stage(two){
+        when{
+          changeset "**/result/**"
+        }
+        steps{
+          echo 'Running Unit Tets on worker app..'
+          dir('result'){
+            sh 'npm test'
+           }
+          }
+      }
+      
+  post{
+    always{
+        echo 'Building multibranch pipeline for worker is completed..'
+    }
+  }
+}

@@ -1,0 +1,29 @@
+pipeline {
+  
+  agent {
+        docker { image 'python:3.5.1' }
+    }
+  
+  stages{
+      stage(one){
+        
+        steps{
+          echo 'Compiling worker app..'
+          dir('vote'){
+            sh 'pip install -i requirements.txt'
+          }
+        }
+      }
+      stage(two){
+        
+        steps{
+          echo 'Running Unit Tets on worker app..'
+          dir('vote'){
+            sh 'nosetests -v'
+           }
+          }
+      }
+      
+  
+}
+}
